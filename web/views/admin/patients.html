@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/customCss.css">
+</head>
+<body ng-app="MainModule" ng-controller="AdminPatientsController">
+<div class="container-fluid big-container">
+    <div class="row">
+        <div class="col-lg-6" id="patients">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h3>Pacienti din sistem:</h3>
+                </div>
+            </div>
+            <div class="row" ng-repeat="patient in patients" style="margin-bottom:5px">
+                <div class="col-lg-6">
+                    <button ng-click="getCompletePatientInfo(patient)">{{patient.fullName}}</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6" id="patient_info">
+            <div ng-if="patientInfo != null">
+                <div id="general_patient_info">
+                    <h3>Informatii despre pacient:</h3>
+                    <p>Nume si prenume: {{patientInfo.fullName}}</p>
+                    <hr>
+                </div>
+
+                <div id="active_sensors">
+                    <h3>Senzori activi:</h3>
+                    <div class="row" style="font-weight:bold">
+                        <div class="col-lg-4">Model</div>
+                        <div class="col-lg-4">Serial No.</div>
+                        <div class="col-lg-4">Elimina</div>
+                    </div>
+                    <div class="row" ng-repeat="sensor in patientInfo.sensors">
+                        <div class="col-lg-4">{{sensor.model}}</div>
+                        <div class="col-lg-4">{{sensor.serial_no}}</div>
+                        <div class="col-lg-4"><button ng-click="removeSensor(sensor.serial_no)">X</button></div>
+                    </div>
+                </div>
+
+                <div id="set_sensor">
+                    <h4>Adauga senzor:</h4>
+                    <form>
+                        <label>Tip senzor:</label>
+                        <select id="tip_senzor" name="tip_senzor" ng-change="setDisplayedInactiveSensors()"
+                                ng-model="inactiveSensorsStuff.sensorType" ng-options="sensorType for sensorType in inactiveSensorTypes">
+                        </select>
+                        <label>Serial No.</label>
+                        <select id="serial_no" name="serial_no" ng-model="inactiveSensorsStuff.serial_no"
+                                ng-options="serialNo for serialNo in currentDisplayedInactiveSensors">
+                        </select>
+                        <button ng-click="setSensor()">Adauga</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="manage_patients">
+    <div class="container-fluid big-container">
+        <div class="row">
+            <div class="col-lg-6" id="add_patient">
+                <div class="row">
+                    <div>
+                        <h3>Adauga pacient in sistem:</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>Nume:</label>
+                        <input type="text" ng-model="newPatient.lastName"/>
+                        <br>
+                        <label>Prenume:</label>
+                        <input type="text" ng-model="newPatient.firstName"/>
+                        <br>
+                        <button ng-click="addPatient()">Adauga pacient</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script src="/javascript/modules/MainModule.js"></script>
+<script src="/javascript/services/SensorsServices.js"></script>
+<script src="/javascript/controllers/admin/AdminPatientsController.js"></script>
+</body>
+</html>

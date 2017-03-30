@@ -1,0 +1,28 @@
+
+<html>
+<head>
+    <title>Add patient</title>
+</head>
+<body ng-app="MainModule">
+<div class="container-fluid big-container" ng-controller="DoctorPatientsController">
+    <h3>Adauga pacient:</h3>
+    <label>Nume pacient:</label>
+    <select ng-options="patient.fullName for patient in unclaimedPatients" ng-model="newPatient"></select>
+    <button ng-click="setPatient()">Adauga pacient</button>
+
+    <hr>
+
+    <h3>Elimina pacient:</h3>
+    <label>Nume pacient:</label>
+    <select ng-options="patient.fullName for patient in patients" ng-model="patientToDelete"></select>
+    <button ng-click="removePatient()">Elimina pacient</button>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script src="/javascript/modules/MainModule.js"></script>
+<script src="/javascript/services/SensorsServices.js"></script>
+<script src="/javascript/controllers/doctor/DoctorPatientsController.js"></script>
+</body>
+</html>

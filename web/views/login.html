@@ -1,0 +1,24 @@
+
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body ng-app="MainModule" ng-controller="MainController">
+
+<form>
+    <label>Username:</label>
+    <input type="text" ng-model="authenticationData.uid">
+    <br>
+    <label>Password:</label>
+    <input type="password" ng-model="authenticationData.password">
+    <br>
+    <button ng-click="login()">Submit</button>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script src="/javascript/modules/MainModule.js"></script>
+<script src="/javascript/controllers/MainController.js"></script>
+</body>
+</html>
