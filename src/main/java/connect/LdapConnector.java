@@ -1,27 +1,25 @@
 package connect;
 
+import enitites.PatientEntry;
 import enitites.UserType;
 import org.forgerock.opendj.ldap.*;
-import org.forgerock.opendj.ldap.requests.BindRequest;
 import org.forgerock.opendj.ldap.responses.BindResult;
 import org.forgerock.opendj.ldap.responses.Result;
 import org.forgerock.opendj.ldap.responses.SearchResultEntry;
 
-import javax.jws.soap.SOAPBinding;
-import javax.naming.*;
 import javax.naming.AuthenticationException;
+import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.X509KeyManager;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.*;
-import java.security.cert.*;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
 /**
  * Created by vlad on 13.03.2017.
@@ -181,7 +179,24 @@ public class LdapConnector {
         }
     }
 
-    public void addPatient() {
+    public void addPatient(PatientEntry patientEntry) throws ErrorResultException {
+        Entry entry = new LinkedHashMapEntry();
+        entry.addAttribute("objectClass", "person");
+        entry.addAttribute("objectClass", "patient");
+        entry.addAttribute("objectClass", "top");
+        entry.addAttribute("cn", patientEntry.getCommonName());
+        entry.addAttribute("givenName", patientEntry.getGivenName());
+        entry.addAttribute("sn", patientEntry.getSurname());
+        entry.addAttribute("uid", patientEntry.getUid());
+        entry.setName("uid=" + patientEntry.getUid() + ",ou=Patients,ou=Users,dc=spital,dc=moinesti,dc=com");
 
+        try {
+            connection.add(entry);
+        } catch (ErrorResultException e) {
+            System.out.println("Error while adding patient!");
+            e.printStackTrace();
+            throw e;
+        }
+        //entry.setName("uid=" + p  atientEntry.getUid() + ",ou=Patients,ou=Users,dc=spital,dc=moinesti,dc=com");
     }
 }

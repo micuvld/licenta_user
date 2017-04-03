@@ -13,8 +13,8 @@ MainModule.controller("AdminPatientsController", ['$scope', '$http', 'SensorsSer
     };
 
     $scope.newPatient = {
-        distinguishedName: "",
-        fullName: ""
+        givenName: "",
+        surname: ""
     };
 
     $scope.patientToDelete = {
@@ -43,6 +43,10 @@ MainModule.controller("AdminPatientsController", ['$scope', '$http', 'SensorsSer
             data: $scope.newPatient
         }).then(function(response) {
             console.log(response);
+            alert("Pacientul:" + $scope.newPatient.surname + " " +
+                $scope.newPatient.givenName +
+                " a fost adaugat cu uid: "
+                + response.data.uid);
             window.location.reload();
             alert("Pacient adaugat cu succes!");
         }, function(response) {
