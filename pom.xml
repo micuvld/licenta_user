@@ -25,6 +25,11 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
+        <repository>
+            <id>cloudera</id>
+            <name>Cloudera</name>
+            <url>https://repository.cloudera.com/content/repositories/releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -44,6 +49,41 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.8.7</version>
+        </dependency>
+
+        <!-- Apache HTTP Client & dependencies -->
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient-cache</artifactId>
+            <version>4.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>fluent-hc</artifactId>
+            <version>4.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>groupId</groupId>
+            <artifactId>licenta_security_provider</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.cloudera.alfredo/alfredo -->
+        <dependency>
+            <groupId>com.cloudera.alfredo</groupId>
+            <artifactId>alfredo</artifactId>
+            <version>0.1.5</version>
         </dependency>
 
     </dependencies>

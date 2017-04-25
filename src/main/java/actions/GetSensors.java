@@ -1,10 +1,6 @@
 package actions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import connect.LdapConnector;
 import mongo.MongoConnector;
 import org.bson.Document;
 
@@ -15,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
-import static com.mongodb.client.model.Filters.eq;
 
 /**
  * Created by vlad on 16.03.2017.

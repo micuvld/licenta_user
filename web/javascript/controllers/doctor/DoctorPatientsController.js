@@ -55,7 +55,8 @@ MainModule.controller("DoctorPatientsController", ['$scope', '$http', 'SensorsSe
             method: "POST",
             url: "/patient/set",
             params: {
-                patientDn: $scope.newPatient.distinguishedName
+                patientDn: $scope.newPatient.distinguishedName,
+                severity: "IMPORTANT"
             }
         }).then(function(response) {
             console.log(response);

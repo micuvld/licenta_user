@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Commands</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body ng-app="MainModule" ng-controller="CommandsController">
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Resolve</th>
+            <th>Type</th>
+            <th>Issuer</th>
+            <th>Subject</th>
+            <th>Target</th>
+            <th>Severity</th>
+            <th>Resolvers</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="command in commands" ng-class="getRowColor(command)">
+            <td><button ng-click="resolve(command)">Resolve</button></td>
+            <td>{{command.type}}</td>
+            <td>{{command.issuer}}</td>
+            <td>{{command.subject}}</td>
+            <td>{{command.target}}</td>
+            <td>{{command.severity}}</td>
+            <td>{{command.resolvers}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script src="/javascript/modules/MainModule.js"></script>
+<script src="/javascript/controllers/CommandsController.js"></script>
+</body>
+</html>
