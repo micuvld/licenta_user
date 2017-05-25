@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 
 @WebServlet("/patients/remove")
-public class RemovePatient extends HttpServlet {
+public class    RemovePatient extends HttpServlet {
     public static ObjectMapper objectMapper = new ObjectMapper();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

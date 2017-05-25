@@ -1,5 +1,7 @@
 package command;
 
+import com.cloudera.alfredo.client.AuthenticatedURL;
+import com.cloudera.alfredo.client.AuthenticationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.Consts;
@@ -19,8 +21,7 @@ import utils.Configs;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -71,21 +72,36 @@ public class CommandActions {
             e.printStackTrace();
         }
 
-        System.out.println(uri.toString());
-        HttpGet httpGet = new HttpGet(uri);
+        AuthenticatedURL.Token token = new AuthenticatedURL.Token();
+        URL url = null;
         try {
-            CloseableHttpResponse response =  client.execute(httpGet);
-            HttpEntity entity = response.getEntity();
-
-            String responseString = EntityUtils.toString(entity, "UTF-8");
-            ObjectMapper objectMapper = new ObjectMapper();
-
-            System.out.println(responseString);
-            return Arrays.asList(objectMapper.readValue(responseString, Command[].class));
+            url = new URL("http://localhost:18080/queue_commands?requesterDn=noDn");
+            HttpURLConnection conn = new AuthenticatedURL().openConnection(url, token);
+            System.out.println(conn.getResponseMessage());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("Failed to execute HttpGet at getting commands!");
+            e.printStackTrace();
+        } catch (AuthenticationException e) {
             e.printStackTrace();
         }
+
+
+//        System.out.println(uri.toString());
+//        HttpGet httpGet = new HttpGet(uri);
+//        try {
+//            CloseableHttpResponse response =  client.execute(httpGet);
+//            HttpEntity entity = response.getEntity();
+//
+//            String responseString = EntityUtils.toString(entity, "UTF-8");
+//            ObjectMapper objectMapper = new ObjectMapper();
+//
+//            System.out.println(responseString);
+//            return Arrays.asList(objectMapper.readValue(responseString, Command[].class));
+//        } catch (IOException e) {
+//            System.out.println("Failed to execute HttpGet at getting commands!");
+//            e.printStackTrace();
+//        }
 
         return new ArrayList<>();
     }

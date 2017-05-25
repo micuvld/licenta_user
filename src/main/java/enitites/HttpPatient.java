@@ -15,6 +15,19 @@ public class HttpPatient {
     @JsonProperty("familyName")
     private String familyName;
 
+    public HttpPatient(String uid, String displayName, String givenName, String familyName) {
+        this.uid = uid;
+        this.displayName = displayName;
+        this.givenName = givenName;
+        this.familyName = familyName;
+    }
+
+    public HttpPatient(String uid, String givenName, String familyName) {
+        this.uid = uid;
+        this.givenName = givenName;
+        this.familyName = familyName;
+    }
+
     public String getUid() {
         return uid;
     }

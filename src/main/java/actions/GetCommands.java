@@ -24,7 +24,7 @@ public class GetCommands extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        List<Command> commands = CommandActions.getCommands(session.getAttribute("dn").toString());
+        List<Command> commands = CommandActions.getCommands("dnulmeu");
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.writeValue(response.getWriter(), commands);

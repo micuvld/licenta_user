@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import command.*;
 import connection.SecureCommunication;
 import enitites.HttpPatient;
 import enitites.Patient;
 import ldap.LdapConnector;
 import ldap.PatientEntry;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.forgerock.opendj.ldap.*;
 import org.forgerock.opendj.ldap.responses.SearchResultEntry;
 import org.forgerock.opendj.ldif.ConnectionEntryReader;
@@ -16,10 +18,7 @@ import utils.Configs;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -30,42 +29,73 @@ import java.util.Random;
  * Created by vlad on 15.03.2017.
  */
 @WebServlet("/patients")
-public class GetPatients extends HttpServlet {
+public class Patients extends HttpServlet {
     private final static int MAX_PATIENT_ID = 100000;
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
+    //CREATE PATIENT
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        PatientEntry patient = objectMapper.readValue(request.getReader(), PatientEntry.class);
+        HttpPatient patientToAdd = objectMapper.readValue(request.getReader(), HttpPatient.class);
 
-        HttpSession session = request.getSession();
-        LdapConnector ldapConnector = (LdapConnector) session.getAttribute("connector");
+        Cookie[] cookies = request.getCookies();
+        String requesterUid = SecureCommunication.getCookie(cookies, "uid");
 
-        addPatient(ldapConnector, patient);
+        String severity = request.getParameter("severity");
 
-        JsonNodeFactory nodeFactory = JsonNodeFactory.instance;
-        ObjectNode jsonNode = nodeFactory.objectNode();
-        jsonNode.put("uid", patient.getUid());
+        Command command = new Command();
+        command.setType(CommandType.ADD);
+        command.setIssuer(requesterUid);
+        command.setSubject(objectMapper.writeValueAsString(patientToAdd));
+        command.setTarget(patientToAdd.getUid());
+        command.setSeverity(CommandSeverity.valueOf(severity));
+        command.setState(CommandState.PENDING);
 
-        response.getWriter().write(jsonNode.toString());
-    }
-
-    public void addPatient(LdapConnector connector, PatientEntry patientEntry) {
-        boolean patientIsCreated = false;
-        int newPatientId = (new Random()).nextInt(MAX_PATIENT_ID);
-        patientEntry.setUid("patient" + newPatientId);
-
-        while (!patientIsCreated) {
-            try {
-                connector.addPatient(patientEntry);
-                patientIsCreated = true;
-                System.out.println("Patient created with uid: " + patientEntry.getUid());
-            } catch (ErrorResultException e) {
-                System.out.println("Patient ID already exists. Trying with another ID...");
-            }
+        CloseableHttpResponse commandResponse;
+        try {
+            commandResponse = CommandActions.sendCommand(command);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            throw new ServletException();
         }
+        System.out.println(commandResponse.toString());
+
+        /**
+         * CODE THAT ADDS A PATIENT TO MONGO DB (+addPatient())
+         * SHOULD BE MOVED TO COMMAND RESOLVER
+         */
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        PatientEntry patient = objectMapper.readValue(request.getReader(), PatientEntry.class);
+//
+//        HttpSession session = request.getSession();
+//        LdapConnector ldapConnector = (LdapConnector) session.getAttribute("connector");
+//
+//        addPatient(ldapConnector, patient);
+//
+//        JsonNodeFactory nodeFactory = JsonNodeFactory.instance;
+//        ObjectNode jsonNode = nodeFactory.objectNode();
+//        jsonNode.put("uid", patient.getUid());
+//
+//        response.getWriter().write(jsonNode.toString());
     }
 
+//    public void addPatient(LdapConnector connector, PatientEntry patientEntry) {
+//        boolean patientIsCreated = false;
+//        int newPatientId = (new Random()).nextInt(MAX_PATIENT_ID);
+//        patientEntry.setUid("patient" + newPatientId);
+//
+//        while (!patientIsCreated) {
+//            try {
+//                connector.addPatient(patientEntry);
+//                patientIsCreated = true;
+//                System.out.println("Patient created with uid: " + patientEntry.getUid());
+//            } catch (ErrorResultException e) {
+//                System.out.println("Patient ID already exists. Trying with another ID...");
+//            }
+//        }
+//    }
+
+    //GET ALL PATIENTS
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<HttpPatient> patients;
         try {
@@ -179,6 +209,4 @@ public class GetPatients extends HttpServlet {
 
         return differenceList;
     }
-
-
 }
